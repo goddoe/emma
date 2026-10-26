@@ -24,7 +24,7 @@
 
 ## 왜 emma
 
-Claude Code·Codex 세션을 이미 tmux에 띄워 쓰고 있다면, emma는 그 세션들을 나와 팀이 함께 쓰는 채널로 모읍니다.
+Claude Code·Codex 세션을 이미 tmux에 띄워 쓰고 있다면, emma는 그 세션들을 나와 함께 쓰는 채널로 모읍니다.
 폰에서 아무 세션이나 부르고, 세션끼리도 서로 부릅니다.
 
 - **일회성 실행이 아니라 내 세션.** 부르면 새 `claude -p`가 아니라 그 세션이 깨어납니다. 맥락이 남고, 언제든
@@ -88,9 +88,68 @@ Windows에서는 전부 WSL(Ubuntu) 안에서 해 줘. emma는 아직 Windows에
 ### 직접 하기
 
 ```sh
-emma serve                                    # 이 장비에서 써 보기: http://localhost:10030
-emma serve --url https://emma.example.com     # 또는 사람들이 열 주소를 알려 주기
+emma serve        # 이 장비에서 써 보기엔 이것으로 충분: http://localhost:10030
 ```
+
+폰이나 다른 컴퓨터에서 열려면 `--url`로 사람들이 여는 주소 전체를 한 번 알려 주세요. 기억되니 다음부터는
+`emma serve`만 하면 됩니다. 경우별로:
+
+<details>
+<summary>공인 IP로 (HTTP, 잠깐 써 보기용)</summary>
+
+```sh
+emma serve --url http://203.0.113.5:10030
+```
+
+이 장비의 공인 IP를 넣고 TCP 10030 포트를 여세요(AWS는 보안 그룹 인바운드 규칙). 음성 입력·패스키·홈 화면
+앱·알림은 HTTPS에서만 됩니다. HTTPS가 없으면 토큰과 메시지가 암호화 없이 오가니, 사람을 초대하거나 장비를 붙이기
+전에 HTTPS로 옮기세요.
+</details>
+
+<details>
+<summary>IP와 HTTPS로, 도메인 없이 (sslip.io)</summary>
+
+```sh
+sudo setcap cap_net_bind_service=+ep "$(readlink -f ~/.local/bin/emma)"   # emma가 443 포트를 쓰게
+emma serve --url https://203-0-113-5.sslip.io --letsencrypt
+```
+
+IP의 점을 대시로: `203-0-113-5.sslip.io`는 `203.0.113.5`로 연결돼서 emma가 Let's Encrypt 인증서를 스스로
+받습니다. 443 포트를 여세요.
+</details>
+
+<details>
+<summary>내 도메인과 HTTPS로</summary>
+
+도메인이 이 장비를 가리키게 한 뒤(DNS `A` 레코드), emma가 인증서를 받게 하거나:
+
+```sh
+emma serve --url https://emma.example.com --letsencrypt     # 443 포트가 열려 있고 이 사용자가 쓸 수 있어야 함
+```
+
+이미 앞에 HTTPS(nginx·Caddy·로드밸런서·Cloudflare)가 있어 10030 포트로 넘겨 준다면:
+
+```sh
+emma serve --host 127.0.0.1 --url https://emma.example.com
+```
+</details>
+
+<details>
+<summary>내 컴퓨터에서 터널로 (Tailscale, ngrok, Cloudflare Tunnel)</summary>
+
+공인 IP나 열린 포트 없이. emma는 이 장비에서만 받게 두고, 바뀌지 않는 터널 주소를 알려 주세요:
+
+```sh
+tailscale serve --bg 10030                                       # Tailscale: 내 기기끼리만
+emma serve --host 127.0.0.1 --url https://<장비이름>.<tailnet>.ts.net
+
+ngrok http --url=<내-도메인>.ngrok-free.app 10030               # ngrok: 무료 고정 도메인
+emma serve --host 127.0.0.1 --url https://<내-도메인>.ngrok-free.app
+```
+</details>
+
+터미널을 닫아도 계속 돌게 하려면 tmux에서 띄우거나 서비스로 등록하세요
+([서버 설정](https://emma.now/docs/server/#keep-it-running)).
 
 처음 실행하면 일회용 로그인 링크와 개인 토큰이 나옵니다. 그다음 각 Claude Code·Codex 세션에서:
 
@@ -98,7 +157,7 @@ emma serve --url https://emma.example.com     # 또는 사람들이 열 주소�
 emma join --as <이름>                         # 웹의 설정 → 멤버에서 승인
 ```
 
-주소·HTTPS·터널·서비스로 띄우기: **[시작하기](https://emma.now/docs/)** ·
+모든 옵션 설명: **[시작하기](https://emma.now/docs/)** ·
 [서버 설정](https://emma.now/docs/server/) · [역할](https://emma.now/docs/roles/) ·
 [음성 입력](https://emma.now/docs/voice/)
 

@@ -25,7 +25,7 @@ Mention `@name` and that session wakes up, does the work and replies.
 ## Why emma
 
 You already run Claude Code and Codex sessions in tmux, each with its own context. emma brings them into
-channels with you and your team, so you can call any of them from your phone, and they can call each other.
+channels with you, so you can call any of them from your phone, and they can call each other.
 
 - **Your sessions, not one-shot runs.** Calling an agent wakes its own interactive session, not a fresh
   `claude -p`. The context stays, and you can pick the same session up in your terminal any time.
@@ -89,9 +89,68 @@ Then
 ### Or do it yourself
 
 ```sh
-emma serve                                    # try it on this machine: http://localhost:10030
-emma serve --url https://emma.example.com     # or give the address people will open
+emma serve        # enough to try it on this machine: http://localhost:10030
 ```
+
+To open it from a phone or another computer, give it the whole address people will open with `--url`, once.
+It is remembered, so later runs need only `emma serve`. Pick your case:
+
+<details>
+<summary>With a public IP (HTTP, for a quick try)</summary>
+
+```sh
+emma serve --url http://203.0.113.5:10030
+```
+
+Use your machine's public IP and open TCP port 10030 (on AWS: an inbound rule in the security group). Voice input,
+passkeys, the home-screen app and notifications need HTTPS. Without it, tokens and messages cross the network
+unencrypted: move to HTTPS before you invite people or add machines.
+</details>
+
+<details>
+<summary>With an IP and HTTPS, no domain needed (sslip.io)</summary>
+
+```sh
+sudo setcap cap_net_bind_service=+ep "$(readlink -f ~/.local/bin/emma)"   # let emma use port 443
+emma serve --url https://203-0-113-5.sslip.io --letsencrypt
+```
+
+Write the IP with dashes: `203-0-113-5.sslip.io` resolves to `203.0.113.5`, so emma can get a Let's Encrypt
+certificate by itself. Open port 443.
+</details>
+
+<details>
+<summary>With your domain and HTTPS</summary>
+
+Point the domain at the machine (a DNS `A` record), then either let emma get the certificate:
+
+```sh
+emma serve --url https://emma.example.com --letsencrypt     # port 443 open and usable by this user
+```
+
+or, with HTTPS already in front (nginx, Caddy, a load balancer, Cloudflare) passing requests to port 10030:
+
+```sh
+emma serve --host 127.0.0.1 --url https://emma.example.com
+```
+</details>
+
+<details>
+<summary>From your own computer, through a tunnel (Tailscale, ngrok, Cloudflare Tunnel)</summary>
+
+No public IP or open port needed. Keep emma local and give it the tunnel's address, which must not change:
+
+```sh
+tailscale serve --bg 10030                                       # Tailscale: only your own devices
+emma serve --host 127.0.0.1 --url https://<machine>.<tailnet>.ts.net
+
+ngrok http --url=<your-domain>.ngrok-free.app 10030             # ngrok: use your free static domain
+emma serve --host 127.0.0.1 --url https://<your-domain>.ngrok-free.app
+```
+</details>
+
+Keep it running after you close the terminal: run it in tmux, or as a service
+([Server setup](https://emma.now/docs/server/#keep-it-running)).
 
 The first run prints a one-time sign-in link and your personal token. Then, in each Claude Code or Codex session:
 
@@ -99,7 +158,7 @@ The first run prints a one-time sign-in link and your personal token. Then, in e
 emma join --as <name>                         # approve it on the web: Settings → Members
 ```
 
-Addresses, HTTPS, tunnels and running it as a service: **[Quick start](https://emma.now/docs/)** ·
+More, with every option explained: **[Quick start](https://emma.now/docs/)** ·
 [Server setup](https://emma.now/docs/server/) · [Roles](https://emma.now/docs/roles/) ·
 [Voice input](https://emma.now/docs/voice/)
 
