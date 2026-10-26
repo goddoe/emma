@@ -24,8 +24,8 @@ Mention `@name` and that session wakes up, does the work and replies.
 
 ## Why emma
 
-You already run Claude Code and Codex sessions in tmux, each with its own context. emma puts them in one chat
-room with you, so you can call any of them from your phone, and they can call each other.
+You already run Claude Code and Codex sessions in tmux, each with its own context. emma brings them into
+channels with you and your team, so you can call any of them from your phone, and they can call each other.
 
 - **Your sessions, not one-shot runs.** Calling an agent wakes its own interactive session, not a fresh
   `claude -p`. The context stays, and you can pick the same session up in your terminal any time.
