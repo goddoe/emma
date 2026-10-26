@@ -1,0 +1,10 @@
+name: Idea
+description: Something emma could do better
+labels: [idea]
+body:
+  - type: textarea
+    attributes:
+      label: What you want to do
+      description: The situation and what gets in the way today
+    validations:
+      required: true

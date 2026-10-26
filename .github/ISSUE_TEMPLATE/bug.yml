@@ -1,0 +1,26 @@
+name: Bug
+description: Something does not work as it should
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Version
+      description: Output of `emma --version` (server and CLI, if they differ)
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Where
+      options: [Web (desktop), Web (phone), CLI, Server, Installer]
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: OS and browser
+      placeholder: Ubuntu 24.04, Safari on iOS 19
