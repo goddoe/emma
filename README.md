@@ -103,8 +103,7 @@ emma serve --url http://203.0.113.5:10030
 ```
 
 Use your machine's public IP and open TCP port 10030 (on AWS: an inbound rule in the security group). Voice input,
-passkeys, the home-screen app and notifications need HTTPS. Without it, tokens and messages cross the network
-unencrypted: move to HTTPS before you invite people or add machines.
+passkeys, the home-screen app and notifications need HTTPS, and HTTPS is recommended for security.
 </details>
 
 <details>
