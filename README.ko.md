@@ -70,7 +70,7 @@ Windows에서는 전부 WSL(Ubuntu) 안에서 해 줘. emma는 아직 Windows에
 2. 설치: curl -fsSL https://get.emma.now/install.sh | sh  (~/.local에 설치, root 불필요. 안내가 나오면 ~/.local/bin을 PATH에 추가)
 3. 사람들이 어떤 주소로 열지 나에게 묻고, 네 작업이 끝나도 계속 돌도록 서버를 띄워 (tmux 또는 systemd 사용자 서비스, 어느 쪽인지 물어봐):
    - 이 장비에서만:     emma serve
-   - 공인 IP, HTTP:     emma serve --url http://<공인-IP>:10030   (TCP 10030 열기. 음성 입력·패스키·홈 화면 앱은 HTTPS에서만)
+   - 공인 IP, HTTP:     emma serve --port 10030 --url http://<공인-IP>:10030   (TCP 10030 열기. 음성 입력·패스키·홈 화면 앱은 HTTPS에서만)
    - 내 도메인, HTTPS:  emma serve --url https://<도메인> --letsencrypt   (DNS가 이 장비를 가리키고, 443 포트가 열려 있고 이 사용자가 쓸 수 있어야 함)
 4. "emma serve listening"이 나올 때까지 기다려. 처음 실행하면 웹 로그인 링크와 내 관리자 개인 토큰이 나오니 둘 다 한 번 알려 주고, 토큰은 비밀번호 관리자에 보관하라고 말해 줘.
 
@@ -95,11 +95,15 @@ emma serve        # 이 장비에서 써 보기엔 이것으로 충분: http://l
 `emma serve`만 하면 됩니다. 경우별로:
 
 <details>
-<summary>공인 IP로 (HTTP, 잠깐 써 보기용)</summary>
+<summary>공인 IP로 (HTTP)</summary>
 
 ```sh
-emma serve --url http://203.0.113.5:10030
+emma serve --port 10030 --url http://203.0.113.5:10030
 ```
+
+`--port`는 emma가 듣는 포트(기본 10030), `--url`은 사람들이 여는 주소라 두 포트를 같게 두세요. 8000번이라면:
+`emma serve --port 8000 --url http://203.0.113.5:8000`. 주소는 다음에도 기억되지만 포트는 아니라서, 다음에도
+`--port`를 주거나 `~/.emma/config.toml`에 `port = 8000`을 넣어 두세요.
 
 이 장비의 공인 IP를 넣고 TCP 10030 포트를 여세요(AWS는 보안 그룹 인바운드 규칙). 음성 입력·패스키·홈 화면
 앱·알림은 HTTPS에서만 되고, 보안을 위해서도 HTTPS를 권장합니다.
