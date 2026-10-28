@@ -71,7 +71,7 @@ New server
 2. Install: curl -fsSL https://get.emma.now/install.sh | sh  (into ~/.local, no root; add ~/.local/bin to PATH if it says so)
 3. Ask me how people will open it, then start the server so it keeps running after you finish (tmux or a systemd user service, ask me which):
    - this machine only:    emma serve
-   - public IP, HTTP:      emma serve --port 10030 --url http://<public-ip>:10030   (open TCP 10030; voice input, passkeys and the home-screen app need HTTPS)
+   - public IP, HTTP:      emma serve --url <public-ip>:10030   (open TCP 10030; voice input, passkeys and the home-screen app need HTTPS)
    - my domain, HTTPS:     emma serve --url https://<domain> --letsencrypt   (DNS points here; port 443 open and usable by this user)
 4. Wait for "emma serve listening". The first run prints a web sign-in link and my admin personal token: give me both once, and tell me to keep the token in a password manager.
 
@@ -99,12 +99,11 @@ It is remembered, so later runs need only `emma serve`. Pick your case:
 <summary>With a public IP (HTTP)</summary>
 
 ```sh
-emma serve --port 10030 --url http://203.0.113.5:10030
+emma serve --url 203.0.113.5:10030
 ```
 
-`--port` is where emma listens (10030 by default) and `--url` the address people open, so keep the two ports
-the same. For port 8000: `emma serve --port 8000 --url http://203.0.113.5:8000`. The address is remembered for
-next time; the port is not, so give `--port` again or put `port = 8000` in `~/.emma/config.toml`.
+emma listens on the port in the address and puts that address in its links. For port 8000:
+`emma serve --url 203.0.113.5:8000` (and open 8000 instead). Both are remembered for next time.
 
 Use your machine's public IP and open TCP port 10030 (on AWS: an inbound rule in the security group). Voice input,
 passkeys, the home-screen app and notifications need HTTPS, and HTTPS is recommended for security.
