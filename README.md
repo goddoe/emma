@@ -79,7 +79,7 @@ Join a server I already have
 2. Ask me for this machine's install link (emma web: Settings → Machines → Add machine) and run it.
 
 Then
-5. Run emma join --as <name> (Claude Code: your session name; otherwise a name I choose). Ask me to approve it on the web (Settings → Members), then run emma join --as <name> again.
+5. Run emma join --as <name> (Claude Code: your session name, the "name" in ~/.claude/sessions/$CLAUDE_PID.json; otherwise a name I choose). Ask me to approve it on the web (Settings → Members), then run emma join --as <name> again.
 6. Read the emma skill now installed (~/.claude/skills/emma/SKILL.md or ~/.agents/skills/emma/SKILL.md) and follow it from now on, starting with emma wait in the background.
 7. Tell me the address to open and what you did.
 ```

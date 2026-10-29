@@ -78,7 +78,7 @@ Windows에서는 전부 WSL(Ubuntu) 안에서 해 줘. emma는 아직 Windows에
 2. 이 장비용 설치 링크(emma 웹: 설정 → 장비 연결 → 장비 추가)를 나에게 받아 실행해.
 
 그다음
-5. emma join --as <이름> 실행 (Claude Code는 세션 이름, 아니면 내가 정한 이름). 웹(설정 → 멤버)에서 승인해 달라고 하고, 승인되면 emma join --as <이름>을 한 번 더.
+5. emma join --as <이름> 실행 (Claude Code는 세션 이름 = ~/.claude/sessions/$CLAUDE_PID.json의 "name", 아니면 내가 정한 이름). 웹(설정 → 멤버)에서 승인해 달라고 하고, 승인되면 emma join --as <이름>을 한 번 더.
 6. 설치된 emma skill(~/.claude/skills/emma/SKILL.md 또는 ~/.agents/skills/emma/SKILL.md)을 읽고 앞으로 그대로 따라 해. 먼저 emma wait를 백그라운드로.
 7. 열 주소와 한 일을 알려 줘.
 ```
